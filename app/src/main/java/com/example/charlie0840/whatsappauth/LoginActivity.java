@@ -150,8 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             String name = getString(R.string.default_name);
                             FirebaseUser user = task.getResult().getUser();
-                            String prevName = user.getDisplayName().toString();
-                            if(!prevName.equals(name)) {
+                            if(user.getDisplayName() == null) {
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(name).build();
                                 if (user != null)
