@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WhatsAppAuth</string>
+    <string name="logged_out">Logged out</string>
+    <string name="default_name">New User</string>
 </resources>

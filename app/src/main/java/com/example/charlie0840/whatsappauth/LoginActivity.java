@@ -1,5 +1,7 @@
 package com.example.charlie0840.whatsappauth;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,12 +10,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -84,6 +93,75 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.login_button:
+                String code = pwdInput.getText().toString();
+                if(TextUtils.isEmpty(code)) {
+                    pwdInput.setError("password needed");
+                    return;
+                }
+                verifyPhoneNumberWithCode(mVerificationId, code);
+                break;
+            case R.id.send_pwd_button:
+                if(!validatePhoneNumber()) {
+                    return;
+                }
+                resendBtn.setVisibility(View.VISIBLE);
+                phoneNum = phoneInput.getText().toString();
+                startPhoneNumberVerification(phoneNum);
+                break;
+            case R.id.resend_button:
+                if(phoneNum.length() == 0)
+                    return;
+                resendVerificationCode(phoneNum, mResendToken);
+                break;
+        }
+    }
 
+    private void startPhoneNumberVerification(String phoneNumber) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, this, mCallbacks);
+
+    }
+
+    private void verifyPhoneNumberWithCode(String verificationId, String code) {
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
+
+        logInWithCredential(credential);
+    }
+
+    private void resendVerificationCode(String phoneNumber, PhoneAuthProvider.ForceResendingToken token) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, this, mCallbacks, token);
+    }
+
+    private void logInWithCredential(PhoneAuthCredential credential) {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()) {
+                            String name = getString(R.string.default_name);
+                            FirebaseUser user = task.getResult().getUser();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name).build();
+                            if(user != null)
+                                user.updateProfile(profileUpdates);
+                            //TODO: start activity profile
+                        }
+                        else {
+                            if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                });
+    }
+
+    private boolean validatePhoneNumber() {
+        String phoneNumber = phoneInput.getText().toString();
+        if(TextUtils.isEmpty(phoneNumber)) {
+            phoneInput.setText("Invalid format");
+            return false;
+        }
+        return true;
     }
 }
