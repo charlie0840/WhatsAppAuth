@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -46,7 +47,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         changeBtn.setOnClickListener(this);
         logoutBtn.setOnClickListener(this);
 
-        nameText.setText(currUser.getDisplayName());
+        if(currUser == null)
+            logOut();
+        else
+            nameText.setText(currUser.getDisplayName());
 
     }
 
@@ -54,11 +58,30 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.change_button:
-                //TODO: change user name
+                String currName = nameText.getText().toString();
+                changeUserName(currName);
                 break;
             case R.id.logout_button:
-                //TODO: logout
+                logOut();
                 break;
         }
+    }
+
+    private void changeUserName(String currName) {
+        if(currUser == null)
+            return;
+        UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                .setDisplayName(currName).build();
+        currUser.updateProfile(profileChangeRequest);
+    }
+
+    private void logOut() {
+        logoutBtn.setVisibility(View.GONE);
+        changeBtn.setVisibility(View.GONE);
+        nameText.setVisibility(View.GONE);
+        welcomeText.setText(R.string.logged_out);
+        if(mAuth == null)
+            return;
+        mAuth.signOut();
     }
 }
