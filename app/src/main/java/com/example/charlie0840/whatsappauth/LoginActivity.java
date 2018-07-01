@@ -119,6 +119,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
     private void startPhoneNumberVerification(String phoneNumber) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, this, mCallbacks);
 
@@ -134,20 +135,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS, this, mCallbacks, token);
     }
 
+    /*
+     * log into account using the sent credential, change the new user's displayname to "new user"
+     *
+     */
     private void logInWithCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
-                            String name = getString(R.string.default_name);
-                            FirebaseUser user = task.getResult().getUser();
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(name).build();
-                            if(user != null)
-                                user.updateProfile(profileUpdates);
 
                             Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+
+                            String name = getString(R.string.default_name);
+                            FirebaseUser user = task.getResult().getUser();
+                            String prevName = user.getDisplayName().toString();
+                            if(!prevName.equals(name)) {
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(name).build();
+                                if (user != null)
+                                    user.updateProfile(profileUpdates);
+                            }
                             startActivity(intent);
                         }
                         else {
@@ -159,6 +168,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+    /*
+     * check if the phone number is valid(format: +1 xxx xxx xxxx)
+     */
     private boolean validatePhoneNumber() {
         String phoneNumber = phoneInput.getText().toString();
         if(TextUtils.isEmpty(phoneNumber)) {
