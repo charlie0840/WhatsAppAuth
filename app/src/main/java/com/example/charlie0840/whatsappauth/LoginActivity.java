@@ -1,6 +1,7 @@
 package com.example.charlie0840.whatsappauth;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -145,7 +146,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     .setDisplayName(name).build();
                             if(user != null)
                                 user.updateProfile(profileUpdates);
-                            //TODO: start activity profile
+
+                            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                            startActivity(intent);
                         }
                         else {
                             if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
