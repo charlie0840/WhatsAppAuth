@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ManageActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/cow_list_section"
+            android:layout_height="match_parent"
+            android:layout_width="150dp">
+            <TextView
+                android:id="@+id/cow_list_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/cow_list"
+                android:text="Your Cow List"
+                android:textSize="20dp"
+                android:textStyle="bold|italic"/>
+            <ListView
+                android:id="@+id/cow_list"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+
+                android:layout_marginBottom="150dp"
+                android:layout_below="@+id/cow_list_title">
+            </ListView>
+
+            <RelativeLayout
+                android:id="@+id/add_cow_section"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true">
+                <EditText
+                    android:id="@+id/cow_name_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="Name of Cow"
+                    android:textSize="12dp"/>
+                <Button
+                    android:id="@+id/add_cow_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Add"
+                    android:textSize="10dp"
+                    android:layout_below="@+id/cow_name_field"/>
+
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/production_list_section"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/cow_list_section">
+            <TextView
+                android:id="@+id/production_list_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/production_list"
+                android:text="Production List"
+                android:textSize="20dp"
+                android:textStyle="bold|italic"/>
+            <ListView
+                android:id="@+id/production_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="150dp"
+                android:layout_below="@+id/production_list_title">
+            </ListView>
+            <RelativeLayout
+                android:id="@+id/add_production_section"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_alignParentBottom="true">
+                <EditText
+                    android:id="@+id/morning_product_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="10dp"
+                    android:hint="Morning Production"/>
+                <EditText
+                    android:id="@+id/evening_product_field"
+                    android:layout_below="@+id/morning_product_field"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="10dp"
+                    android:textColor="@color/colorBlack"
+                    android:hint="Evening Production"/>
+                <Button
+                    android:id="@+id/add_production_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/evening_product_field"
+                    android:textSize="10dp"
+                    android:text="Add"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
