@@ -2,7 +2,8 @@
 
 Simple Phone Authenticator using Firebase
 
-Introduction
+Introduction:
+
   Authenticate through phone
 
 Phone Number Format: +1xxxxxxxxxx
