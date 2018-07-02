@@ -49,8 +49,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         if(currUser == null)
             logOut();
-        else
-            nameText.setText(currUser.getDisplayName());
+        else {
+            if(currUser.getDisplayName() == null)
+                nameText.setText(R.string.default_name);
+            else
+                nameText.setText(currUser.getDisplayName());
+        }
 
     }
 

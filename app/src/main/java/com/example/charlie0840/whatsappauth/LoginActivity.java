@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                 //do nothing, no need for auto fill
                 //Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_LONG).show();
-                //logInWithCredential(phoneAuthCredential);
+                logInWithCredential(phoneAuthCredential);
             }
 
             @Override
@@ -146,8 +146,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
 
-                            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-
                             String name = getString(R.string.default_name);
                             FirebaseUser user = task.getResult().getUser();
                             if(user.getDisplayName() == null) {
@@ -155,7 +153,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         .setDisplayName(name).build();
                                 if (user != null)
                                     user.updateProfile(profileUpdates);
+                                System.out.println("name is " + user.getDisplayName() + "!");
                             }
+                            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                             startActivity(intent);
                         }
                         else {
