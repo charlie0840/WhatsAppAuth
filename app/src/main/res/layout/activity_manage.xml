@@ -42,7 +42,7 @@
                     android:layout_margin="5dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="Name of Cow"
+                    android:hint="Name of Cow"
                     android:textSize="12dp"/>
                 <Button
                     android:id="@+id/add_cow_button"
@@ -80,25 +80,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_alignParentBottom="true">
+
                 <EditText
                     android:id="@+id/morning_product_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_margin="5dp"
+                    android:hint="Morning Production"
+                    android:inputType="number"
                     android:textColor="@color/colorBlack"
-                    android:textSize="10dp"
-                    android:hint="Morning Production"/>
+                    android:textSize="10dp" />
+
                 <EditText
                     android:id="@+id/evening_product_field"
-                    android:layout_below="@+id/morning_product_field"
-                    android:layout_margin="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/morning_product_field"
                     android:layout_centerHorizontal="true"
-                    android:textSize="10dp"
+                    android:layout_margin="5dp"
+                    android:hint="Evening Production"
+                    android:inputType="number"
                     android:textColor="@color/colorBlack"
-                    android:hint="Evening Production"/>
+                    android:textSize="10dp" />
                 <Button
                     android:id="@+id/add_production_button"
                     android:layout_width="wrap_content"

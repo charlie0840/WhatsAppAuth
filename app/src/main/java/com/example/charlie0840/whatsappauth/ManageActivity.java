@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,8 +21,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class ManageActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -37,7 +41,7 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
     private DatabaseReference myRef;
 
     private int pos;
-    private String userID;
+    private String userID, currCowID;
     private HashSet<String> cowSet;
 
     private User currUser;
@@ -66,6 +70,8 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         addCowBtn = findViewById(R.id.add_cow_button);
         addProductBtn = findViewById(R.id.add_production_button);
 
+        addProductBtn.setEnabled(false);
+
         cowNameText = findViewById(R.id.cow_name_field);
         productEveText = findViewById(R.id.evening_product_field);
         productMornText = findViewById(R.id.morning_product_field);
@@ -74,10 +80,6 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         addProductBtn.setOnClickListener(this);
 
         cowSet = new HashSet<>();
-
-        getUser();
-        currUser = userStore.get(0);
-        getCows();
 
         productAdapter = new CowCustomList(ManageActivity.this, productNameList);
         productListView.setAdapter(productAdapter);
@@ -107,24 +109,25 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                 int firstLoc = cowListView.getFirstVisiblePosition();
                 int lastLoc = cowListView.getLastVisiblePosition();
                 int numOfVisibleView = lastLoc - firstLoc;
-                for(int i = 0; i < numOfVisibleView; i++) {
+                for(int i = 0; i <= numOfVisibleView; i++) {
                     cowListView.getChildAt(i).setBackgroundColor(Color.parseColor("#ffffff"));
                 }
                 cowListView.getChildAt(position - firstLoc).setBackgroundColor(Color.parseColor("#57DF89"));
                 pos = position;
-                fillProduction(cowNameList.get(pos));
+                getTheCow(cowNameList.get(position));
             }
         });
 
+        getUser();
 
     }
 
     private void fillProduction(final String cowName) {
-        getTheCow(cowName);
         final String cowID = cowStore.get(0);
         myRef.child("Productions").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                productList.clear();
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for(DataSnapshot child: children) {
                     Production product = child.getValue(Production.class);
@@ -132,6 +135,15 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                         productList.add(product);
                     }
                 }
+                productNameList.clear();
+                System.out.println("set to 0 for productnameList");
+                for(Production product: productList) {
+                    String temp = Integer.toString(product.amount) + " " + product.date;
+                    productNameList.add(temp);
+                }
+                System.out.println("productnameList with size " + productNameList.size());
+                productAdapter.notifyDataSetChanged();
+                addProductBtn.setEnabled(true);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -139,12 +151,7 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        productNameList.clear();
-        for(Production product: productList) {
-            String temp = Integer.toString(product.amount) + " " + product.date;
-            productNameList.add(temp);
-        }
-        productAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -161,6 +168,8 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                         break;
                     }
                 }
+                currUser = userStore.get(0);
+                getCows();
             }
 
             @Override
@@ -180,8 +189,11 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                     Cow cow = child.getValue(Cow.class);
                     if(cow.name.equals(cowName) && cow.ownerID.equals(userID)) {
                         cowStore.add(child.getKey());
+                        break;
                     }
                 }
+                currCowID = cowStore.get(0);
+                fillProduction(cowNameList.get(pos));
             }
 
             @Override
@@ -195,6 +207,7 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         myRef.child("Cows").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                cowList.clear();
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for(DataSnapshot child: children) {
                     Cow cow = child.getValue(Cow.class);
@@ -202,6 +215,16 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                         cowList.add(cow);
                     }
                 }
+
+
+                cowNameList.clear();
+
+                for(Cow cow: cowList) {
+                    String temp = cow.name;
+                    cowNameList.add(temp);
+                    cowSet.add(temp);
+                }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -209,21 +232,85 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        cowNameList.clear();
+    }
 
-        for(Cow cow: cowList) {
-            String temp = cow.name;
-            cowNameList.add(temp);
-            cowSet.add(temp);
+    private void insertCow() {
+        String name = cowNameText.getText().toString();
+        if(cowSet.contains(name)) {
+            Toast.makeText(this, "name already existed", Toast.LENGTH_LONG).show();
+            return;
         }
+
+        Cow cow = new Cow(userID, name, new ArrayList<String>());
+
+        myRef.child("Cows").push().setValue(cow);
+
+        cowNameList.add(name);
+        adapter.notifyDataSetChanged();
+        getTheCow(name);
+        cowListView.clearChoices();
         adapter.notifyDataSetChanged();
     }
 
+    private void insertProduction() {
+        int val1 = 0, val2 = 0;
+        String s1 = productMornText.getText().toString();
+        String s2 = productEveText.getText().toString();
+        if(s1.equals("") || s2.equals("")) {
+            Toast.makeText(this, "Please enter the amount, 0 if none", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!s1.equals(""))
+            val1 = Integer.parseInt(productMornText.getText().toString());
+        if(!s2.equals(""))
+            val2 = Integer.parseInt(productEveText.getText().toString());
 
+        int total = val1 + val2;
+
+        Date date = new Date();
+
+        Production production = new Production(currCowID, total, date);
+
+        myRef.child("Productions").push().setValue(production);
+
+        productNameList.add(total + date.toString());
+        productAdapter.notifyDataSetChanged();
+
+//        final List<String> list = new ArrayList<>();
+//
+//        myRef.child("Cows").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+//                for(DataSnapshot child: children) {
+//                    Cow cow = child.getValue(Cow.class);
+//                    if(cow.name.equals(cowName) && cow.ownerID.equals(userID)) {
+//                        list.addAll(cow.productions);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
+//
+//        DatabaseReference ref = myRef.child("Cows").child(currCowID);
+//        list.add()
+//        Map<String, Object> newListMap = new HashMap<>();
+
+    }
 
 
     @Override
     public void onClick(View v) {
-
+        switch(v.getId()) {
+            case R.id.add_cow_button:
+                insertCow();
+                break;
+            case R.id.add_production_button:
+                insertProduction();
+                break;
+        }
     }
 }

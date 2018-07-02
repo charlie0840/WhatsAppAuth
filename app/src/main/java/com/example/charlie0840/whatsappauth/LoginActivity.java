@@ -90,6 +90,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         };
 
+        loginBtn.setEnabled(false);
+
     }
 
     @Override
@@ -104,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 verifyPhoneNumberWithCode(mVerificationId, code);
                 break;
             case R.id.send_pwd_button:
+                loginBtn.setEnabled(true);
                 if(!validatePhoneNumber()) {
                     return;
                 }
