@@ -2,4 +2,6 @@
     <string name="app_name">WhatsAppAuth</string>
     <string name="logged_out">Logged out</string>
     <string name="default_name">New User</string>
+    <string name="add_cow">Add Cow Here</string>
+    <string name="add_production">Add Production Here</string>
 </resources>

@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
+                resendBtn.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "fail", Toast.LENGTH_LONG).show();
                 if(e == null) {
                     return;
@@ -84,6 +85,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
 
                 Toast.makeText(getApplicationContext(), "sent", Toast.LENGTH_LONG).show();
+                loginBtn.setEnabled(true);
+                resendBtn.setVisibility(View.VISIBLE);
                 mVerificationId = verificationId;
                 mResendToken = token;
                 System.out.println("mVerification " + mVerificationId);
@@ -106,11 +109,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 verifyPhoneNumberWithCode(mVerificationId, code);
                 break;
             case R.id.send_pwd_button:
-                loginBtn.setEnabled(true);
                 if(!validatePhoneNumber()) {
                     return;
                 }
-                resendBtn.setVisibility(View.VISIBLE);
                 phoneNum = phoneInput.getText().toString();
                 startPhoneNumberVerification(phoneNum);
                 break;
@@ -176,7 +177,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private boolean validatePhoneNumber() {
         String phoneNumber = phoneInput.getText().toString();
         if(TextUtils.isEmpty(phoneNumber)) {
-            phoneInput.setText("Invalid format");
+            phoneInput.setHint("Invalid format");
             return false;
         }
         return true;

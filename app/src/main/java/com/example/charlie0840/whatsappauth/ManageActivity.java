@@ -138,7 +138,7 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
                 productNameList.clear();
                 System.out.println("set to 0 for productnameList");
                 for(Production product: productList) {
-                    String temp = Integer.toString(product.amount) + " " + product.date;
+                    String temp = "AM:" + Integer.toString(product.morning) + "\nPM:" + Integer.toString(product.evening) + "\n" + product.date;
                     productNameList.add(temp);
                 }
                 System.out.println("productnameList with size " + productNameList.size());
@@ -250,6 +250,9 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
         getTheCow(name);
         cowListView.clearChoices();
         adapter.notifyDataSetChanged();
+        productNameList.clear();
+        productAdapter.notifyDataSetChanged();
+        addProductBtn.setEnabled(false);
     }
 
     private void insertProduction() {
@@ -269,11 +272,11 @@ public class ManageActivity extends AppCompatActivity implements View.OnClickLis
 
         Date date = new Date();
 
-        Production production = new Production(currCowID, total, date);
+        Production production = new Production(currCowID, total, val1, val2, date);
 
         myRef.child("Productions").push().setValue(production);
 
-        productNameList.add(total + date.toString());
+        productNameList.add("AM:" + val1 + "\nPM:" + val2 + "\n" + date.toString());
         productAdapter.notifyDataSetChanged();
 
 //        final List<String> list = new ArrayList<>();

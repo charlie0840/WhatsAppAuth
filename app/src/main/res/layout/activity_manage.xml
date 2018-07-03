@@ -11,20 +11,27 @@
         <RelativeLayout
             android:id="@+id/cow_list_section"
             android:layout_height="match_parent"
-            android:layout_width="150dp">
+            android:layout_width="175dp"
+            >
             <TextView
                 android:id="@+id/cow_list_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/cow_list"
+                android:layout_centerHorizontal="true"
                 android:text="Your Cow List"
                 android:textSize="20dp"
+
                 android:textStyle="bold|italic"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/cow_list_title"
+                android:background="@color/colorGreen">
+            </RelativeLayout>
             <ListView
                 android:id="@+id/cow_list"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:layout_marginBottom="150dp"
                 android:layout_below="@+id/cow_list_title">
             </ListView>
@@ -35,80 +42,147 @@
                 android:layout_height="150dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true">
-                <EditText
-                    android:id="@+id/cow_name_field"
+                <RelativeLayout
+                    android:id="@+id/divide_cow_section2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorGreen">
+                </RelativeLayout>
+                <TextView
+                    android:id="@+id/add_cow_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/add_cow"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold|italic" />
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:hint="Name of Cow"
-                    android:textSize="12dp"/>
+                    android:layout_centerVertical="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/cow_name_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Name of Cow"
+                        android:textSize="12dp" />
+                </android.support.design.widget.TextInputLayout>
                 <Button
                     android:id="@+id/add_cow_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
                     android:layout_centerHorizontal="true"
                     android:text="Add"
                     android:textSize="10dp"
-                    android:layout_below="@+id/cow_name_field"/>
+                    android:background="@drawable/cycle"
+                    android:layout_margin="10dp"
+                    android:layout_alignParentBottom="true"/>
 
             </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/divide_section"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack"
+            android:layout_toRightOf="@+id/cow_list_section">
+
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/production_list_section"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/cow_list_section">
+            android:layout_toRightOf="@+id/divide_section">
             <TextView
                 android:id="@+id/production_list_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/production_list"
+                android:layout_centerHorizontal="true"
                 android:text="Production List"
                 android:textSize="20dp"
                 android:textStyle="bold|italic"/>
+            <RelativeLayout
+                android:id="@+id/divide_product_section"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorGreen"
+                android:layout_below="@+id/production_list_title"></RelativeLayout>
             <ListView
                 android:id="@+id/production_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="150dp"
-                android:layout_below="@+id/production_list_title">
+                android:layout_below="@+id/divide_product_section">
             </ListView>
             <RelativeLayout
                 android:id="@+id/add_production_section"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_alignParentBottom="true">
-
-                <EditText
-                    android:id="@+id/morning_product_field"
+                <RelativeLayout
+                    android:id="@+id/divide_product_section2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="5dp"
-                    android:hint="Morning Production"
-                    android:inputType="number"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="10dp" />
-
-                <EditText
-                    android:id="@+id/evening_product_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/morning_product_field"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="5dp"
-                    android:hint="Evening Production"
-                    android:inputType="number"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="10dp" />
-                <Button
-                    android:id="@+id/add_production_button"
+                    android:layout_height="2dp"
+                    android:background="@color/colorGreen">
+                </RelativeLayout>
+                <TextView
+                    android:id="@+id/add_production_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/evening_product_field"
+                    android:layout_margin="5dp"
+                    android:text="@string/add_production"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold|italic" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_field"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/morning_product_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Morning Production"
+                        android:inputType="number"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="8dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/evening_product_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Evening Production"
+                        android:inputType="number"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="8dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/add_production_button"
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/cycle"
                     android:textSize="10dp"
                     android:text="Add"/>
             </RelativeLayout>

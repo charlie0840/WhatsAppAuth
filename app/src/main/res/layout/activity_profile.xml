@@ -38,7 +38,8 @@
         android:id="@+id/change_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change"
+        android:text="  Change  "
+        android:background="@drawable/cycle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -62,10 +63,11 @@
         android:id="@+id/cow_manage_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Manage Cows"
+        android:text="    Manage Cows    "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/cycle"
         app:layout_constraintVertical_bias="0.678" />
 </android.support.constraint.ConstraintLayout>
